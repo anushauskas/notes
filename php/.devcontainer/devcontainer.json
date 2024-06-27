@@ -1,0 +1,20 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
+{
+	"name": "Node.ts",
+	"image": "mcr.microsoft.com/devcontainers/php:7",
+
+	"remoteEnv": {
+		"WEB_DRIVER_HUB_URL": "http://host.docker.internal:4444"
+	},
+
+	"postCreateCommand": "sudo chmod a+x \"$(pwd)/myapi\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)/myapi\" /var/www/html",
+
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+			]
+		}
+	}
+}
