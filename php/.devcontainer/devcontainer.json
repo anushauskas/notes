@@ -5,15 +5,15 @@
 	"image": "mcr.microsoft.com/devcontainers/php:7",
 
 	"remoteEnv": {
-		"WEB_DRIVER_HUB_URL": "http://host.docker.internal:4444"
 	},
 
-	"postCreateCommand": "sudo chmod a+x \"$(pwd)/myapi\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)/myapi\" /var/www/html",
+	"postCreateCommand": "sudo chmod a+x \"$(pwd)/myapi\" && sudo rm -rf /var/www/html && sudo ln -s \"$(pwd)/myapi\" /var/www/html && sudo ./devcontainer.entrypoint.sh",
 
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
+				"emallin.phpunit"
 			]
 		}
 	}
