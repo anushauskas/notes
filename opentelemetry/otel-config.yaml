@@ -1,0 +1,97 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+  loki:
+    protocols:
+      http:
+    use_incoming_timestamp: true
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: my.namespace/otelcol-contrib
+          scrape_interval: 60s
+          metrics_path: /metrics
+          static_configs:
+            - targets: 
+                - 0.0.0.0:8888
+              labels: 
+                deployment_environment: test
+
+processors:
+  batch:
+  attributes/fluentbit:
+    actions: 
+      - key: loki.attribute.labels
+        value: level, job, deployment_environment, service_name, service_namespace
+        action: insert
+  resource/fluentbit:
+    attributes:
+      - action: insert
+        key: loki.format
+        value: raw
+  resource:
+    attributes:
+      - action: insert
+        key: loki.resource.labels
+        value: deployment.environment, service.name, service.namespace
+
+  
+exporters:
+  logging:
+    verbosity: detailed
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    # namespace: ap
+
+  # prometheusremotewrite/aws:
+  #   endpoint: https://....grafana.net/api/prom/push
+  #   headers:
+  #     Authorization: "Basic ${AWS_PROM_AUTH}"
+  #   resource_to_telemetry_conversion:
+  #     enabled: true # Convert resource attributes to metric labels
+  # loki/aws:
+  #   endpoint: "https://....grafana.net/loki/api/v1/push"
+  #   default_labels_enabled:
+  #     exporter: false
+  #     job: true
+  #     instance: false
+  #     level: true
+  #   headers:
+  #     authorization: "Basic ${AWS_LOKI_AUTH}"
+  # otlp/aws:
+  #   endpoint: "....grafana.net:443"
+  #   headers:
+  #     authorization: "Basic ${AWS_TEMPO_AUTH}"
+
+extensions:
+  health_check:
+
+service:
+  extensions: [health_check]
+  telemetry:
+    logs:
+      level: WARN
+      encoding: "json"
+      initial_fields: 
+        service: "opentelemetry collector"
+    metrics:
+      level: basic
+  pipelines:
+    # traces:
+    #   receivers: [otlp]
+    #   processors: [batch]
+    #   exporters: [logging]
+    metrics:
+      receivers: [otlp, prometheus]
+      processors: [batch]
+      exporters: [prometheus] # prometheus
+    # logs:
+    #   receivers: [otlp]
+    #   processors: [resource, batch]
+    #   exporters: [logging]
+    # logs/fluentbit:
+    #   receivers: [loki]
+    #   processors: [resource/fluentbit, attributes/fluentbit, batch]
+    #   exporters: [loki/aws]

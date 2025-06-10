@@ -1,0 +1,18 @@
+services:
+
+  collector:
+    build:
+      context: .
+    command: [--config=/etc/otel/config.yaml]
+    ports:
+      - 13133:13133 # health_check extension
+      - 4317:4317 # grpc
+      - 4318:4318 # http
+      - 3500:3500 # loki http
+      - 8889:8889 # prometheus
+      # - 8888:8888 # collector metrics
+    environment:
+      AWS_LOKI_AUTH: teststst
+      AWS_TEMPO_AUTH: teststst
+      AWS_PROM_AUTH: teststst
+      
