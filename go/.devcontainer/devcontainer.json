@@ -1,0 +1,16 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/images/tree/main/src/go
+{
+	"name": "Go 1.27",
+	"image": "mcr.microsoft.com/devcontainers/go:1.27",
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"golang.go"
+			]
+		}
+	}
+
+	// "postCreateCommand": "go mod tidy"
+}
