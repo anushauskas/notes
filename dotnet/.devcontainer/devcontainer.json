@@ -1,0 +1,17 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/images/tree/main/src/dotnet
+{
+	"name": ".NET 10 LTS",
+	"image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-dotnettools.csharp",
+				"ms-dotnettools.csdevkit"
+			]
+		}
+	}
+	
+	// "postCreateCommand": "dotnet restore HelloWorld"
+}
